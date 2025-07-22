@@ -83,7 +83,7 @@ def insert_file_contents(filename, preparation_args):
 
     entries = []
 
-    with open(filename, 'rU') as csv_in:
+    with open(filename, newline='') as csv_in:
         next(csv_in)
         csv_out = (line for line in csv.reader(csv_in, dialect='excel'))
         for row in csv_out:
@@ -121,7 +121,10 @@ def prepare_for_insertion(row, name_is_username=True, convert_to_lower=False,
     # The first component of the group is 'Root', which we do not need
     group_components = group.split('/')[1:]
 
-    path = '/'.join(group_components + [name])
+    if 'Other' in group_components:
+        path = '/'.join(group_components + [name])
+    else:
+        path = name
 
     if convert_to_lower:
         path = path.lower()
